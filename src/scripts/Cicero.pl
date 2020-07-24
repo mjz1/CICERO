@@ -39,10 +39,9 @@ my ($sample, $genome, $ref_genome, $gene_model_file, $gm);
 my $gm_format = "REFFLAT";
 
 # external programs related variable
-# 1. cap3 related variables
-my $cap3_options = " -o 25 -z 2 -h 60 -y 10 > /dev/null 2>&1";
-
-# 2 blat related variables, using blat server and blat standalone
+# cap3
+my $cap3_options;
+# blat related variables, using blat server and blat standalone
 my $blat_client_exe = "gfClient";
 my $blat_client_options = '-out=psl -nohead > /dev/null 2>&1';
 my ($blat_server, $blat_port, $dir_2bit); 
@@ -129,6 +128,11 @@ $max_num_hits = $conf->{MAX_NUM_HITS} unless($max_num_hits);
 $min_fusion_distance = $conf->{MIN_FUSION_DIST} unless($min_fusion_distance);
 $min_sclip_reads = $conf->{MIN_SC_READS} unless($min_sclip_reads);
 $min_sclip_len = $conf->{MIN_SC_LEN} unless($min_sclip_len);
+
+# cap3 related variables
+my $clip_allowed = $read_len - 36; # Based on wanting at least a 36-mer overlap consistent with results from velvet
+$cap3_options = " -o 25 -z 2 -h 60 -y $clip_allowed > /dev/null 2>&1" unless ($cap3_options);
+print STDERR "cap3 options: $cap3_options\n";
 
 croak "You need specify the input gene model file" unless ($gene_model_file);
 if($gene_model_file) {
