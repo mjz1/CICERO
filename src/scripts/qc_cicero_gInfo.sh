@@ -1,12 +1,12 @@
 #!/bin/bash
 # QCs the soft clips results for a run
 #
-# $1 = case EBN 
+# $1 = case EBN
 # $2 = data directory
 source qclib.sh
 
 CASE=$1
-DIR=$2 
+DIR=$2
 
 CaseDir="$DIR/$CASE"
 
@@ -24,13 +24,13 @@ if ls $CaseDir/$CASE.gene_info.txt >&2; then passtest; else aborttestcase; fi
 starttest GinfoSize
 cutoff=200
 while read file
-do 
+do
   if [ "`filesize $file`" -lt $cutoff ]
-  then 
+  then
     ls -l $file >&2
     failtestifactive Found at least one cover that was too small
   fi
-done< <(ls $CaseDir/$CASE.gInfo.txt | sed '$d' )
+done< <(ls $CaseDir/$CASE.gene_info.txt | sed '$d' )
 passtestbydefault
 
 summarize
