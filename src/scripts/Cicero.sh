@@ -315,8 +315,11 @@ parallel --joblog 02_Cicero.log $PARALLEL_ARG < cmds-02.sh
 #########################
 echo "Step 03 - $(date +'%Y.%m.%d %H:%M:%S') - Combine"
 {
-find $CICERO_DATADIR/$SAMPLE/*/ -type f -name 'unfiltered.fusion.txt' -exec cat {} \; | sort -V -k 9,9 -k 10,10n -k 11,11n > $CICERO_DATADIR/$SAMPLE/unfiltered.fusion.txt
-find $CICERO_DATADIR/$SAMPLE/*/ -type f -name 'unfiltered.internal.txt' -exec cat {} \; | sort -V -k 9,9 -k 10,10n -k 11,11n > $CICERO_DATADIR/$SAMPLE/unfiltered.internal.txt
+FILE_COUNT=`wc -l cmds-02.sh | awk '{ print $1 }'`
+eval "echo $CICERO_DATADIR/$SAMPLE/$SAMPLE.{1..$FILE_COUNT}/unfiltered.fusion.txt" | xargs cat | sort -V -k 9,9 -k 10,10n -k 11,11n > $CICERO_DATADIR/$SAMPLE/unfiltered.fusion.txt
+eval "echo $CICERO_DATADIR/$SAMPLE/$SAMPLE.{1..$FILE_COUNT}/unfiltered.internal.txt" | xargs cat | sort -V -k 9,9 -k 10,10n -k 11,11n > $CICERO_DATADIR/$SAMPLE/unfiltered.internal.txt
+# find $CICERO_DATADIR/$SAMPLE/*/ -type f -name 'unfiltered.fusion.txt' -exec cat {} \; | sort -V -k 9,9 -k 10,10n -k 11,11n > $CICERO_DATADIR/$SAMPLE/unfiltered.fusion.txt
+# find $CICERO_DATADIR/$SAMPLE/*/ -type f -name 'unfiltered.internal.txt' -exec cat {} \; | sort -V -k 9,9 -k 10,10n -k 11,11n > $CICERO_DATADIR/$SAMPLE/unfiltered.internal.txt
 } 1> 03_Combine.out 2> 03_Combine.err
 
 ## QC
